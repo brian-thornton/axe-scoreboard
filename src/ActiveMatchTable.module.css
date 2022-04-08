@@ -1,0 +1,24 @@
+.active {
+   background-color: #4dff00 !important;
+}
+
+.bull {
+  background-color: red !important;
+}
+
+.edit {
+  max-width: 100px !important;
+  width: 100px !important;
+}
+
+.editInput {
+  width: 80px !important;
+}
+
+.killshot {
+  background-color: blue !important;
+}
+
+.winner {
+  background-color: #4dff00 !important;
+}

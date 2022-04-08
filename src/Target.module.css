@@ -1,0 +1,80 @@
+.outerLine {
+  position: absolute;
+  width: 50%;
+  height: 50%;
+  background-color: #000000;
+  border-radius: 50%; 
+}
+
+.ring {
+  background-color: #FFFFFF;
+  border-radius: 50%;
+  height: 98%;
+  margin-left: 1%;
+  margin-top: 1%;
+  position: relative;
+  width: 98%;
+}
+
+.ring:hover {
+  background-color: #003eff;
+}
+
+.line {
+  margin-top: 10%;
+  margin-left: 10%;
+  position: absolute;
+  width: 80%;
+  height: 80%;
+  background-color: #000000;
+  border-radius: 50%;
+}
+
+.twoRing {
+  background-color: #FFFFFF;
+  border-radius: 50%;
+  height: 98%;
+  margin-left: 1%;
+  margin-top: 1%;
+  position: relative;
+  width: 98%;
+}
+
+.twoRing:hover {
+  background-color: #003eff;
+}
+
+.fourLine {
+  margin-top: 15%;
+  margin-left: 15%;
+  position: absolute;
+  width: 70%;
+  height: 70%;
+  background-color: #000000;
+  border-radius: 50%;
+}
+
+.fiveLine {
+  margin-top: 29%;
+  margin-left: 29%;
+  position: absolute;
+  width: 40%;
+  height: 40%;
+  background-color: #000000;
+  border-radius: 50%;
+}
+
+.bull {
+  margin-top: 25%;
+  margin-left: 25%;
+  position: absolute;
+  width: 50%;
+  height: 50%;
+  background-color: #000000;
+  border-radius: 50%; 
+}
+
+.bull:hover {
+  background-color: red;
+}
+
