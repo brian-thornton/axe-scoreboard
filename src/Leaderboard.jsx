@@ -1,12 +1,9 @@
 import Button from 'react-bootstrap/Button';
-import Card from "react-bootstrap/Card";
-import Container from "react-bootstrap/Container";
 import Form from "react-bootstrap/Form";
 import React from "react";
-import Row from "react-bootstrap/Row";
 import Table from "react-bootstrap/Table";
 
-import logo from "./target.svg";
+import NoMatchData from './NoMatchData';
 import styles from './Leaderboard.module.css';
 
 const Leaderboard = ({ startMatch, matchPlayers, setMatchPlayers }) => {
@@ -107,23 +104,7 @@ const Leaderboard = ({ startMatch, matchPlayers, setMatchPlayers }) => {
           <Button onClick={startMatch}>Start Match</Button>
         </>
       )}
-      {!matchHistory?.length && (
-        <Card className={styles.noHistoryCard}>
-          <Card.Body style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-            <Container fluid>
-              <Row style={{ marginBottom: "20px" }}>
-                <img src={logo} alt="Axe" />
-              </Row>
-              <Row style={{ marginBottom: "20px" }}>
-                No Match Data. Play a match to view Leaderboard data.
-              </Row>
-              <Row>
-                <Button onClick={startMatch}>Start Match</Button>
-              </Row>
-            </Container>
-          </Card.Body>
-        </Card>
-      )}
+      {!matchHistory?.length && <NoMatchData startMatch={startMatch} />}
     </>
   );
 };

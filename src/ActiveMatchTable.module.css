@@ -3,7 +3,8 @@
 }
 
 .bull {
-  background-color: red !important;
+  border-width: 2px !important;
+  border-color: red !important;
 }
 
 .edit {
@@ -16,7 +17,8 @@
 }
 
 .killshot {
-  background-color: blue !important;
+  border-width: 2px !important;
+  border-color: blue !important;
 }
 
 .winner {

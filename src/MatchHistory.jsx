@@ -10,7 +10,7 @@ const MatchHistory = () => {
   }
 
   return (
-    <>
+    <div id="matchHistory">
       {!matchHistory?.length && <NoMatchHistory />}
       {matchHistory.length && matchHistory.sort((a,b) => {
         return new Date(b.matchDate) - new Date(a.matchDate);
@@ -19,7 +19,7 @@ const MatchHistory = () => {
           <MatchTable match={match} />
         );
       })}
-    </>
+    </div>
   )
 };
 

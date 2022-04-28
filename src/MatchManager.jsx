@@ -28,7 +28,13 @@ const MatchManager = () => {
           9: 0,
           10: 0,
         },
+        dropped: false,
         matchTotal: 0,
+        remainingKillshots: 2,
+        totalKillshots: 2,
+        killshotOneEnabled: true,
+        killshotTwoEnabled: false,
+        killshotThreeEnabled: false,
       });
     });
 

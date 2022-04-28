@@ -38,7 +38,7 @@ const MatchTable = ({ match }) => {
   const matchTable = () => {
     return (
       <>
-      {matchDate.toLocaleDateString(undefined, options)}
+      {matchDate.toLocaleDateString(undefined, options)} {matchDate.toLocaleTimeString('en-US')}
       <Table style={{marginBottom: '40px'}} striped bordered hover>
         <thead>
           <tr>
