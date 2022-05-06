@@ -13,7 +13,7 @@ const NoMatchData = ({ startMatch }) => {
       <Card.Body className={styles.noHistoryCardBody}>
         <Container fluid>
           <Row className={styles.noHistoryCardImageRow}>
-            <img src={localStorage["noPlayersImage"] || logo} className={styles.noHistoryCardImage} alt="Axe" />
+            <img src={localStorage["wallpaper"] || logo} className={styles.noHistoryCardImage} alt="Axe" />
           </Row>
           <Row className={styles.noHistoryCardTextRow}>
             No Match Data. Play a match to view Leaderboard data.

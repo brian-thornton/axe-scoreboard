@@ -1,0 +1,22 @@
+.centerRow {
+  align-items: center !important;
+  display: flex !important;
+  font-size: 30 !important;
+  justify-content: center !important;
+}
+
+.leaderboardButton {
+  margin-left: 10px !important;
+  width: 20% !important;
+}
+
+.nextMatchButton {
+  width: 20% !important;
+}
+
+.winnerLabel {
+  align-items: center !important;
+  display: flex !important;
+  font-size: 30 !important;
+  justify-content: center !important;
+}

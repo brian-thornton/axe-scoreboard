@@ -12,17 +12,10 @@ const AxeNav = () => {
           <Navbar.Brand href="#home">{localStorage["title"] || 'Axe Scoreboard'}</Navbar.Brand>
           <Nav className="me-auto">
             <Nav.Link href="leaderboard">Leaderboard</Nav.Link>
+            <Nav.Link href="teams">Teams</Nav.Link>
+            <Nav.Link href="players">Players</Nav.Link>
             <Nav.Link href="history">Match History</Nav.Link>
-            <NavDropdown title="Settings" id="nav-dropdown">
-              <NavDropdown.Item eventKey="4.1" onClick={() => {
-                localStorage.removeItem("title");
-                localStorage.removeItem("matchHistory");
-                localStorage.removeItem("wallpaper");
-                window.location.reload();
-              }}>Clear Data</NavDropdown.Item>
-              <NavDropdown.Item eventKey="4.2">Export Data</NavDropdown.Item>
-              <NavDropdown.Item href="settings">Customize</NavDropdown.Item>
-            </NavDropdown>
+            <Nav.Link href="settings">Settings</Nav.Link>
           </Nav>
         </Container>
       </Navbar>

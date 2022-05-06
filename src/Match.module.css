@@ -1,0 +1,18 @@
+.beginButton {
+  margin-left: 10px !important;
+}
+
+.button {
+  width: 100% !important;
+}
+
+.editingLabel {
+  align-items: center !important;
+  display: flex !important;
+  font-size: 30 !important;
+  justify-content: center !important;
+}
+
+.row {
+  margin-top: 20px;
+}

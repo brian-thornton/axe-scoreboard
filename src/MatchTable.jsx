@@ -3,6 +3,12 @@ import Table from "react-bootstrap/Table";
 
 const MatchTable = ({ match }) => {
   const roundCell = (player, matchThrow) => {
+    if (player.matchThrows[matchThrow] === 6) {
+      return <td style={{borderWidth: '2px', borderColor: 'red'}}>{player.matchThrows[matchThrow]}</td>;
+    } else if (player.matchThrows[matchThrow] === 8) {
+      return <td style={{borderWidth: '2px', borderColor: 'blue'}}>{player.matchThrows[matchThrow]}</td>;
+    }
+
     return <td>{player.matchThrows[matchThrow]}</td>
   };
 
@@ -34,6 +40,7 @@ const MatchTable = ({ match }) => {
 
   const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
   const matchDate = new Date(match.matchDate);
+  const overtimeMatch = match.players.filter((p) => p.matchThrows[11] !== undefined).length > 0;
 
   const matchTable = () => {
     return (
@@ -43,16 +50,13 @@ const MatchTable = ({ match }) => {
         <thead>
           <tr>
             <th>Name</th>
-            <th>1</th>
-            <th>2</th>
-            <th>3</th>
-            <th>4</th>
-            <th>5</th>
-            <th>6</th>
-            <th>7</th>
-            <th>8</th>
-            <th>9</th>
-            <th>10</th>
+            {Object.keys(match.players[0].matchThrows).map((matchThrow) => {
+              if (matchThrow <= 10) {
+              return <th>{matchThrow}</th>
+              } else {
+                return <th style={{backgroundColor: '#3de0fd'}}>{matchThrow}</th>
+              }
+            })} 
             <th>Total</th>
           </tr>
         </thead>

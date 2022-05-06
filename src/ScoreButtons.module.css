@@ -1,3 +1,11 @@
 .buttonRow {
   margin-top: 10px !important;
 }
+
+.columnButton {
+  width: 100% !important;
+}
+
+.killshotResultButton {
+  width: 100% !important;
+}

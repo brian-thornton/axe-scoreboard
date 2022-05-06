@@ -1,15 +1,17 @@
 import React, { useState } from 'react';
 import Button from 'react-bootstrap/Button';
+import Col from 'react-bootstrap/Col';
 import Row from 'react-bootstrap/Row';
 import Container from 'react-bootstrap/Container';
 
 import ActiveMatchTable from './ActiveMatchTable';
-import AddPlayer from './AddPlayer';
 import DoublePlayerTurn from './DoublePlayerTurn';
+import PlayersList from './PlayersList';
 import PlayerTurn from './PlayerTurn';
 import MatchComplete from './MatchComplete';
 import NoMatchPlayers from './NoMatchPlayers';
 import ScoreButtons from './ScoreButtons';
+import styles from './Match.module.css';
 
 const Match = ({
   matchPlayers,
@@ -84,17 +86,33 @@ const Match = ({
   const isMatchTied = () => {
     const playerScores = players.map((player) => player.matchTotal);
     const maxScore = Math.max(...playerScores);
-    console.log(players.filter((p) => p.matchTotal === maxScore));
 
     if (!tiedPlayers.length) {
       setTiedPlayers(players.filter((p) => p.matchTotal === maxScore));
     }
-    console.log(playerScores.filter((p) => p.matchTotal === maxScore).length > 1);
+
     return {
       result: players.filter((p) => p.matchTotal === maxScore).length > 1,
       tiedPlayers: players.filter((p) => p.matchTotal === maxScore),
     }
   };
+
+  const appendToExistingMatchHistory = (existingHistory, players, matchWinner) => {
+    existingHistory.push({
+      matchDate: new Date(),
+      players: players.map((player) => {
+        return {
+          id: player.id,
+          name: player.name,
+          matchThrows: player.matchThrows,
+          matchTotal: player.matchTotal,
+        };
+      }),
+      winner: matchWinner,
+    });
+
+    localStorage.setItem('matchHistory', JSON.stringify(existingHistory));
+  }
 
   const completeMatch = () => {
     setIsMatchComplete(true);
@@ -132,20 +150,7 @@ const Match = ({
       }
 
       if (existingHistory) {
-        existingHistory.push({
-          matchDate: new Date(),
-          players: players.map((player) => {
-            return {
-              id: player.id,
-              name: player.name,
-              matchThrows: player.matchThrows,
-              matchTotal: player.matchTotal,
-            };
-          }),
-          winner: matchWinner,
-        });
-
-        localStorage.setItem('matchHistory', JSON.stringify(existingHistory));
+        appendToExistingMatchHistory(existingHistory, players, matchWinner);
       } else {
         localStorage.setItem('matchHistory', JSON.stringify(newMatchHistory));
       }
@@ -172,25 +177,10 @@ const Match = ({
   const onModifyScore = (score, isKillshot = false) => {
     const newPlayers = [...players];
     const player = newPlayers.find((player) => player.id === editCell.player?.id);
-
-    if (score === 'drop') {
-      player.matchThrows[editCell.matchThrow] = 0;
-      player.dropped = true;
-
-      if (player.totalKillshots < 3) {
-        player.totalKillshots += 1;
-        player.remainingKillshots += 1;
-
-        if (!player.killshotOneEnabled && !player.killshotTwoEnabled) {
-          player.killshotThreeEnabled = true;
-        }
-      }
-    } else {
-      player.matchThrows[editCell.matchThrow] = score;
-      player.matchTotal = Object.keys(player.matchThrows).reduce((accumulator, mt) => {
-        return accumulator + player.matchThrows[mt];
-      }, 0);
-    }
+    player.matchThrows[editCell.matchThrow] = score === 'drop' ? 0 : score;
+    player.matchTotal = Object.keys(player.matchThrows).reduce((accumulator, mt) => {
+      return accumulator + player.matchThrows[mt];
+    }, 0);
 
     if (isKillshot) {
       player.remainingKillshots -= 1;
@@ -200,19 +190,11 @@ const Match = ({
         player.killshotTwoEnabled = true;
       } else if (player.killshotTwoEnabled) {
         player.killshotTwoEnabled = false;
-
-        if (currentPlayer.dropped && currentPlayer.totalKillshots === 3) {
-          player.killshotThreeEnabled = true;
-        }
-      } else if (player.killshotThreeEnabled) {
-        player.killshotThreeEnabled = false;
       }
     }
 
     setPlayers(newPlayers);
-    //completeRound();
     setEditCell(null);
-
   };
 
   const onCompleteRound = () => {
@@ -223,24 +205,48 @@ const Match = ({
       setCurrentPlayer(players[0]);
       setCurrentRound(currentRound + 1);
 
-      const matchTied = isMatchTied();
+      if (isTie) {
+        const newTiedPlayers = [...tiedPlayers];
+        const tiedPlayerScores = newTiedPlayers.map((player) => player.matchTotal);
+        const maxTiedScore = Math.max(...tiedPlayerScores);
+        const updatedTiedPlayers = newTiedPlayers.filter((p) => p.matchTotal === maxTiedScore);
+        setTiedPlayers(updatedTiedPlayers);
+        setCurrentPlayer(updatedTiedPlayers[0]);
 
-      if (players.length > 1 && matchTied.result) {
-        setIsTie(true);
-
-        let nextElegiblePlayer;
-        console.log(matchTied.tiedPlayers);
-        players.slice(currentPlayerIndex, players.length).map((player) => {
-          if (tiedPlayers.find((tiedPlayer) => tiedPlayer.id === player.id)) {
-            nextElegiblePlayer = player;
-          } else {
-            nextElegiblePlayer = matchTied.tiedPlayers[0];
-          }
+        const knockedOutPlayers = newTiedPlayers.filter((p) => p.matchTotal !== maxTiedScore);
+        const newPlayers = [...players];
+        knockedOutPlayers.map((player) => {
+          newPlayers.find((p) => p.id === player.id).matchThrows = player.matchThrows;
         });
-        setCurrentPlayer(nextElegiblePlayer);
-        addOvertimeThrow();
+
+        setPlayers(newPlayers);
+
+        if (updatedTiedPlayers.length === 1) {
+          completeMatch();
+        } else {
+          addOvertimeThrow();
+        }
+
+        return;
       } else {
-        completeMatch();
+        const matchTied = isMatchTied();
+
+        if (players.length > 1 && matchTied.result) {
+          setIsTie(true);
+
+          let nextElegiblePlayer;
+          players.slice(currentPlayerIndex, players.length).map((player) => {
+            if (tiedPlayers.find((tiedPlayer) => tiedPlayer.id === player.id)) {
+              nextElegiblePlayer = player;
+            } else {
+              nextElegiblePlayer = matchTied.tiedPlayers[0];
+            }
+          });
+          setCurrentPlayer(nextElegiblePlayer);
+          addOvertimeThrow();
+        } else {
+          completeMatch();
+        }
       }
     } else if (currentPlayerIndex === players.length - 1) {
       setCurrentPlayer(players[0]);
@@ -252,6 +258,8 @@ const Match = ({
         const currentTiePlayerIndex = tiedPlayers.findIndex((player) => player.id === currentPlayer.id);
         if (currentTiePlayerIndex === tiedPlayers.length - 1) {
           setCurrentPlayer(tiedPlayers[0]);
+          addOvertimeThrow();
+          setCurrentRound(currentRound + 1);
         } else {
           setCurrentPlayer(tiedPlayers[currentTiePlayerIndex + 1]);
         }
@@ -267,52 +275,109 @@ const Match = ({
     }
   };
 
+  const buttonColumn = (onClick, text, cols = "4") => (
+    <Col lg={cols} md={cols} sm={cols} xs={cols}>
+      <Button className={styles.button} variant="outline-primary" onClick={onClick}>{text}</Button>
+    </Col>
+  );
+
+  const activeMatchTable = (
+    <ActiveMatchTable
+      editCell={editCell}
+      setEditCell={setEditCell}
+      tiedPlayers={tiedPlayers}
+      isTie={isTie}
+      isMatchComplete={isMatchComplete}
+      currentPlayer={currentPlayer}
+      currentRound={currentRound}
+      winner={winner}
+      players={players}
+    />
+  );
+
+  const onBeginMatch = () => {
+    if (players.length > 1 && localStorage['laneConfig'] === 'sideBySideTargets') {
+      setCurrentPlayers(players.slice(0, 2));
+    } else {
+      setCurrentPlayer(players[0]);
+    }
+
+    setIsAddPlayerOpen(false)
+    setCurrentRound(1);
+    setIsMatchStarted(true);
+  };
+
+  const onSetMatchPlayers = (pendingMatchPlayers) => {
+    const playersReadyForMatch = pendingMatchPlayers.map((pending) => {
+      return {
+        id: pending.id,
+        name: pending.name,
+        matchThrows: {
+          1: 0,
+          2: 0,
+          3: 0,
+          4: 0,
+          5: 0,
+          6: 0,
+          7: 0,
+          8: 0,
+          9: 0,
+          10: 0,
+        },
+        dropped: false,
+        matchTotal: 0,
+        remainingKillshots: 2,
+        totalKillshots: 2,
+        killshotOneEnabled: true,
+        killshotTwoEnabled: false,
+        killshotThreeEnabled: false,
+      }
+    });
+
+    setPlayers(playersReadyForMatch);
+  };
+
   return (
     <>
       {!playersDefined && (
         <>
           {!isAddPlayerOpen && <NoMatchPlayers setIsAddPlayerOpen={setIsAddPlayerOpen} />}
-          {isAddPlayerOpen && <AddPlayer setIsAddPlayerOpen={setIsAddPlayerOpen} players={players} setPlayers={setPlayers} />}
+          {isAddPlayerOpen && <PlayersList editEnabled={false} selectEnabled={true} selectedPlayers={players} setSelectedPlayers={onSetMatchPlayers} />}
         </>
       )}
       {(playersDefined && !isMatchStarted) && (
         <>
-          {players.length && <ActiveMatchTable editCell={editCell} setEditCell={setEditCell} tiedPlayers={tiedPlayers} isTie={isTie} isMatchComplete={isMatchComplete} currentPlayer={currentPlayer} currentRound={currentRound} winner={winner} players={players} />}
-          {!isAddPlayerOpen && (
-            <>
-              <Button variant='primary' onClick={() => setIsAddPlayerOpen(true)}>Add Player</Button>
-              <Button
-                disabled={!playersDefined}
-                variant='primary'
-                style={{ marginLeft: '10px' }}
-                onClick={() => {
-                  setCurrentRound(1);
-
-                  if (players.length > 1 && localStorage['laneConfig'] === 'sideBySideTargets') {
-                    setCurrentPlayers(players.slice(0, 2));
-                  } else {
-                    setCurrentPlayer(players[0]);
-                  }
-
-                  setIsMatchStarted(true);
-                }}>
-                {players.length > 1 ? 'Begin Match' : 'Begin Practice'}
-              </Button>
-            </>
-          )}
-          {isAddPlayerOpen && <AddPlayer setIsAddPlayerOpen={setIsAddPlayerOpen} players={players} setPlayers={setPlayers} />}
+          {players.length && activeMatchTable}
+          <>
+            <Button
+              disabled={!playersDefined}
+              variant='primary'
+              onClick={onBeginMatch}
+            >
+              {players.length > 1 ? 'Begin Match' : 'Begin Practice'}
+            </Button>
+          </>
+          {isAddPlayerOpen && !isMatchStarted && <PlayersList editEnabled={false} selectEnabled={true} selectedPlayers={players} setSelectedPlayers={onSetMatchPlayers} />}
         </>
       )}
       {(playersDefined && isMatchStarted && !isMatchComplete) && (
         <>
           {players.length && <ActiveMatchTable editCell={editCell} setEditCell={setEditCell} tiedPlayers={tiedPlayers} isTie={isTie} isMatchComplete={isMatchComplete} currentPlayer={currentPlayer} currentRound={currentRound} winner={winner} players={players} />}
+          {isAddPlayerOpen && <PlayersList editEnabled={false} selectEnabled={true} selectedPlayers={players} setSelectedPlayers={onSetMatchPlayers} />}
           {editCell && (
             <Container fluid>
               <Row>
-                <div style={{ fontSize: 30, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>{`Now Editing: Throw ${editCell.matchThrow} for ${editCell.player.name}`}</div>
+                <div className={styles.editingLabel}>{`Now Editing: Throw ${editCell.matchThrow} for ${editCell.player.name}`}</div>
               </Row>
               <Row>
-                <ScoreButtons currentPlayer={editCell.player} onScore={onModifyScore} setPlayers={setPlayers} players={players}/>
+                <Col sm="3" md="3" lg="3" xl="3" />
+                <Col sm="6" md="6" lg="6" xl="6">
+                  <ScoreButtons isEdit={true} currentPlayer={editCell.player} onScore={onModifyScore} setPlayers={setPlayers} players={players} />
+                </Col>
+              </Row>
+              <Row className={styles.row}>
+                <Col sm="3" md="3" lg="3" xl="3" />
+                {buttonColumn(() => setEditCell(null), 'Cancel Edit', "6")}
               </Row>
             </Container>
 
@@ -342,7 +407,7 @@ const Match = ({
       )}
       {playersDefined && isMatchComplete && (
         <>
-          {players.length && <ActiveMatchTable editCell={editCell} setEditCell={setEditCell} tiedPlayers={tiedPlayers} isTie={isTie} isMatchComplete={isMatchComplete} currentPlayer={currentPlayer} currentRound={currentRound} winner={winner} players={players} />}
+          {players.length && activeMatchTable}
           <MatchComplete goToLeaderboard={goToLeaderboard} startNextMatch={startNextMatch} players={players} winner={winner} />
         </>
       )}

@@ -39,9 +39,7 @@ const ScoreButtons = ({ onScore, currentPlayer, isEdit, setPlayers, players }) =
   const killshotResult = (score, text) => (
     <Col lg="6" md="6" sm="6" xs="6">
       <Button
-        style={{
-          width: '100%',
-        }}
+        className={styles.killshotResultButton}
         variant="outline-primary"
         onClick={() => {
           onScore(score, true);
@@ -55,7 +53,7 @@ const ScoreButtons = ({ onScore, currentPlayer, isEdit, setPlayers, players }) =
 
   const buttonColumn = (onClick, text, cols = "4") => (
     <Col lg={cols} md={cols} sm={cols} xs={cols}>
-      <Button style={{ width: '100%' }} variant="outline-primary" onClick={onClick}>{text}</Button>
+      <Button className={styles.columnButton} variant="outline-primary" onClick={onClick}>{text}</Button>
     </Col>
   );
 
@@ -65,21 +63,23 @@ const ScoreButtons = ({ onScore, currentPlayer, isEdit, setPlayers, players }) =
         {activateKillshotButton(1, currentPlayer.killshotOneEnabled)}
         {activateKillshotButton(2, currentPlayer.killshotTwoEnabled)}
       </Row>
-      <Row className={styles.buttonRow}>
-        {buttonColumn(() => {
-          const newPlayers = [...players];
-          const player = newPlayers.find((p) => p.id === currentPlayer.id);
+      {(isEdit && !currentPlayer.killshotOneEnabled && !currentPlayer.killshotTwoEnabled) && (
+        <Row className={styles.buttonRow}>
+          {buttonColumn(() => {
+            const newPlayers = [...players];
+            const player = newPlayers.find((p) => p.id === currentPlayer.id);
 
-          if (!player.killshotOneEnabled && player.killshotTwoEnabled) {
-            player.killshotOneEnabled = true;
-            player.killshotTwoEnabled = false;
-          } else if (!player.killshotOneEnabled && !player.killshotTwoEnabled) {
-            player.killshotTwoEnabled = true;
-          }
+            if (!player.killshotOneEnabled && player.killshotTwoEnabled) {
+              player.killshotOneEnabled = true;
+              player.killshotTwoEnabled = false;
+            } else if (!player.killshotOneEnabled && !player.killshotTwoEnabled) {
+              player.killshotTwoEnabled = true;
+            }
 
-          setPlayers(newPlayers);
-        }, 'Restore Killshot', '12')}
-      </Row>
+            setPlayers(newPlayers);
+          }, 'Restore Killshot', '12')}
+        </Row>
+      )}
       {activeKillshot && (
         <>
           <Row className={styles.buttonRow}>
@@ -91,14 +91,10 @@ const ScoreButtons = ({ onScore, currentPlayer, isEdit, setPlayers, players }) =
       {!activeKillshot && (
         <>
           <Row className={styles.buttonRow}>
-            {buttonColumn(() => onScore(1), '1')}
-            {buttonColumn(() => onScore(2), '2')}
-            {buttonColumn(() => onScore(3), '3')}
+            {[1, 2, 3].map((score) => buttonColumn(() => onScore(score), `${score}`))}
           </Row>
           <Row className={styles.buttonRow}>
-            {buttonColumn(() => onScore(4), '4')}
-            {buttonColumn(() => onScore(5), '5')}
-            {buttonColumn(() => onScore(6), '6')}
+            {[4, 5, 6].map((score) => buttonColumn(() => onScore(score), `${score}`))}
           </Row>
           <Row className={styles.buttonRow}>
             {buttonColumn(() => onScore('drop'), 'Drop', '6')}

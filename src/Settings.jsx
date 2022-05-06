@@ -55,7 +55,8 @@ const Settings = ({ }) => {
   useEffect(() => {
     if (isRendering) {
       downloadComponentInPDF(document.getElementById("matchHistoryExport"))
-    }}, [isRendering]);
+    }
+  }, [isRendering]);
 
   const imageUpload = (e) => {
     const file = e.target.files[0];
@@ -127,50 +128,19 @@ const Settings = ({ }) => {
       <Row>
         <Button onClick={() => {
           setIsRendering(true);
-          // downloadComponentInPDF(document.getElementById("matchHistoryExport"));
-
-          //   // Default export is a4 paper, portrait, using millimeters for units
-          //   const doc = new jsPDF();
-
-          //   // doc.text("Axe Throwing Results", 10, 10);
-
-
-          //   ReactDOM.render(<MatchHistory />, document.getElementById('root'));
-
-          //   // doc.html(document.getById('#matchHistory'));
-          //   // doc.save('table.pdf')
-
-          //   doc.html(document.getById('#matchHistory'), {
-          //     callback: function (doc) {
-          //       doc.save();
-          //     },
-          //     x: 10,
-          //     y: 10
-          //  });
-
-          //  doc.save('table.pdf')
-
-          // const matchHistoryStorage = localStorage.getItem('matchHistory');
-          // let matchHistory = [];
-          // if (matchHistoryStorage) {
-          //   matchHistory = JSON.parse(matchHistoryStorage);
-          // }
-
-          // matchHistory.sort((a,b) => {
-          //   return new Date(b.matchDate) - new Date(a.matchDate);
-          // }).map((match, index) => {
-          //   doc.setFontSize(12);
-          //   doc.text(match.matchDate, 15, 10 + (index + 1) * 30);
-          //   autoTable(doc, {
-          //     head: [['Name', '1', '2', '3', '4', '5', '6', '7', '8', '9', '10', 'Total']],
-          //     body: match.players.map((player) => [
-          //         player.name, player.matchThrows[1], player.matchThrows[2], player.matchThrows[3], player.matchThrows[4], player.matchThrows[5], player.matchThrows[6], player.matchThrows[7], player.matchThrows[8], player.matchThrows[9], player.matchThrows[10], player.matchTotal,
-          //       ]),
-          //   });
-
-          //   doc.save('table.pdf')
-          // });
         }}>Export to PDF</Button>
+      </Row>
+      <Row>
+        <Button onClick={() => {
+          localStorage.removeItem("title");
+          localStorage.removeItem("matchHistory");
+          localStorage.removeItem("wallpaper");
+          localStorage.removeItem("teams");
+          localStorage.removeItem("players");
+          window.location.reload();
+        }}>
+          Clear All Data
+        </Button>
       </Row>
       <div style={{ visibility: isRendering ? 'visible' : 'hidden' }} id="matchHistoryExport">
         <h2>{`${localStorage["title"] || 'Axe Scoreboard'} - Match History Export`}</h2>

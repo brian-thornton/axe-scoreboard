@@ -13,12 +13,12 @@ const ActiveMatchTable = ({ setEditCell, editCell, isMatchComplete, currentPlaye
 
   const roundCell = (player, matchThrow, index) => {
     if (isTie && index >= 10 && !tiedPlayers.filter((t) => t.id === player.id).length) {
-      return <td onClick={() => onCellClick(player, matchThrow)}>N/A</td>
+      return <td onClick={() => onCellClick(player, matchThrow)}>{player.matchThrows[matchThrow]}</td>
     } else {
       if (editCell && editCell.player === player && editCell.matchThrow === matchThrow && matchThrow < currentRound) {
         return (
           <td className={styles.edit}>
-            <input className={styles.editInput} autoFocus value={player.matchThrows[matchThrow]} />
+            {player.matchThrows[matchThrow]}
           </td>
         );
       } else {
@@ -56,8 +56,6 @@ const ActiveMatchTable = ({ setEditCell, editCell, isMatchComplete, currentPlaye
   const playerRows = () => {
     const rows = [];
 
-
-
     players.filter((p) => p.name !== '').map((player) => {
       return rows.push(
         <tr key={player.id}>
@@ -81,7 +79,7 @@ const ActiveMatchTable = ({ setEditCell, editCell, isMatchComplete, currentPlaye
           <th>Name</th>
           {Object.keys(players[0].matchThrows).map((matchThrow) => {
             if (matchThrow > 10) {
-              return <th>{`Overtime Round ${matchThrow - 10}`}</th>
+              return <th>{`Overtime`}</th>
             }
 
             return <th>{matchThrow}</th>
