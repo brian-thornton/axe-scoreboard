@@ -380,7 +380,6 @@ const Match = ({
                 {buttonColumn(() => setEditCell(null), 'Cancel Edit', "6")}
               </Row>
             </Container>
-
           )}
           {!editCell && localStorage["laneConfig"] === 'singleTarget' && (
             <PlayerTurn

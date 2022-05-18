@@ -3,7 +3,8 @@ import Table from "react-bootstrap/Table";
 
 import styles from './ActiveMatchTable.module.css';
 
-const ActiveMatchTable = ({ setEditCell, editCell, isMatchComplete, currentPlayer, currentRound, winner, players, isTie, tiedPlayers }) => {
+const ActiveMatchTable = ({ framesToDisplay, setEditCell, editCell, isMatchComplete, currentPlayer, currentRound, winner, players, isTie, tiedPlayers }) => {
+
   const onCellClick = (player, matchThrow) => {
     setEditCell({
       player,
@@ -60,7 +61,6 @@ const ActiveMatchTable = ({ setEditCell, editCell, isMatchComplete, currentPlaye
       return rows.push(
         <tr key={player.id}>
           {playerName(player)}
-          {/* {(!isTie || tiedPlayers.filter((t) => t.id === player.id)) && isMatchComplete && <td>{player.name}F</td>} */}
           {Object.keys(player.matchThrows).map((matchThrow, index) => {
             return roundCell(player, matchThrow, index);
           })}

@@ -6,6 +6,7 @@ import MatchManager from "./MatchManager";
 import Players from "./Players";
 import Settings from "./Settings";
 import Teams from "./Teams";
+import TeamMatch from "./TeamMatch";
 
 function App() {
   return (
@@ -18,6 +19,7 @@ function App() {
         <Route path="settings" element={<Settings />} />
         <Route path="teams" element={<Teams />} />
         <Route path="players" element={<Players />} />
+        <Route path="team-match" element={<TeamMatch />} />
       </Routes>
     </div>
   )

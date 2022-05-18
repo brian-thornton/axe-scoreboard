@@ -5,11 +5,12 @@ import styles from './PlayerTurn.module.css';
 import Target from "./Target";
 import ScoreButtons from "./ScoreButtons";
 
-const PlayerTurn = ({ showTarget = true, isTie, tiedPlayers, currentPlayer, players, currentRound, setPlayers, completeRound, handleEndMatch }) => {
+const PlayerTurn = ({ endTurn, teamId, showTarget = true, showEndMatch = true, isTie, tiedPlayers, currentPlayer, players, currentRound, setPlayers, completeRound, handleEndMatch }) => {
   const recordScore = (score, isKillshot) => {
     const newPlayers = [...players];
     const player = newPlayers.find((player) => player.id === currentPlayer?.id);
-
+    console.log(score);
+    console.log(currentRound);
     if (score === 'drop') {
       player.matchThrows[currentRound] = 0;
       player.dropped = true;
@@ -44,8 +45,9 @@ const PlayerTurn = ({ showTarget = true, isTie, tiedPlayers, currentPlayer, play
       }
     }
 
-    setPlayers(newPlayers);
-    completeRound();
+    player.currentRound += 1;
+    setPlayers(newPlayers, teamId);
+    completeRound(teamId);
   };
 
   const handleRingClick = (e, points) => {
@@ -60,6 +62,7 @@ const PlayerTurn = ({ showTarget = true, isTie, tiedPlayers, currentPlayer, play
   );
 
   const scoreButtonsColWidth = showTarget ? "6" : "12";
+  const marginTop = showTarget ? "50px" : "0px";
 
   return (
     <Container>
@@ -74,12 +77,19 @@ const PlayerTurn = ({ showTarget = true, isTie, tiedPlayers, currentPlayer, play
         )}
         {!isTie && (
           <Col lg={scoreButtonsColWidth} md={scoreButtonsColWidth} sm={scoreButtonsColWidth} xs={scoreButtonsColWidth}>
-            <Container fluid style={{ marginTop: '50px' }}>
+            <Container fluid style={{ marginTop }}>
               <>
                 <ScoreButtons currentPlayer={currentPlayer} onScore={recordScore} />
-                <Row className={styles.buttonRow}>
-                  {buttonColumn(handleEndMatch, 'End Match', "12")}
-                </Row>
+                {showEndMatch && (
+                  <Row className={styles.buttonRow}>
+                    {buttonColumn(handleEndMatch, 'End Match', "12")}
+                  </Row>
+                )}
+                {endTurn && (
+                  <Row className={styles.buttonRow}>
+                    {buttonColumn(() => endTurn(teamId), 'End Turn', "12")}
+                  </Row>
+                )}
               </>
             </Container>
           </Col>

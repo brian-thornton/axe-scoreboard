@@ -3,6 +3,7 @@ import Container from 'react-bootstrap/Container';
 import { ListUl } from 'react-bootstrap-icons';
 import Row from 'react-bootstrap/Row';
 import Table from 'react-bootstrap/Table';
+import { Navigate } from 'react-router-dom';
 import React, { useEffect, useState } from "react";
 
 import CreateTeam from './CreateTeam';
@@ -12,6 +13,7 @@ const Teams = ({ }) => {
   const [teams, setTeams] = useState([]);
   const [selectedTeam, setSelectedTeam] = useState();
   const [isCreateTeamOpen, setIsCreateTeamOpen] = useState(false);
+  const [redirectUrl, setRedirectUrl] = useState();
 
   const loadExistingTeams = () => {
     const existingTeamsRaw = localStorage.getItem('teams');
@@ -24,10 +26,37 @@ const Teams = ({ }) => {
 
   return (
     <>
+      {redirectUrl && (<Navigate to={redirectUrl} />)} 
       <Container fluid>
+        {teams.length !== 0 && !isCreateTeamOpen && (
+          <Row>
+            <Button
+              style={{ width: '100px', marginLeft: '10px' }}
+              variant="primary"
+              type="submit"
+              onClick={() => setIsCreateTeamOpen(true)}
+            >
+              Add
+            </Button>
+            <Button
+              style={{ width: '150px', marginLeft: '10px' }}
+              variant="primary"
+              type="submit"
+              onClick={() => setRedirectUrl('/team-match')}
+            >
+              Play Team Match
+            </Button>
+          </Row>
+        )}
         {isCreateTeamOpen && (
           <Row>
-            <CreateTeam selectedTeam={selectedTeam} setSelectedTeam={setSelectedTeam} teams={teams} setTeams={setTeams} setIsCreateTeamOpen={setIsCreateTeamOpen} />
+            <CreateTeam
+              selectedTeam={selectedTeam}
+              setSelectedTeam={setSelectedTeam}
+              teams={teams}
+              setTeams={setTeams}
+              setIsCreateTeamOpen={setIsCreateTeamOpen}
+            />
           </Row>
         )}
         {!isCreateTeamOpen && teams.map((team, index) => {
@@ -36,7 +65,7 @@ const Teams = ({ }) => {
               <Table striped bordered hover>
                 <thead>
                   <tr>
-                    <th>{team.name}<ListUl style={{marginLeft: '10px'}} onClick={() => {
+                    <th>{team.name}<ListUl style={{ marginLeft: '10px' }} onClick={() => {
                       setSelectedTeam(team);
                       setIsCreateTeamOpen(true);
                     }} /></th>
@@ -58,11 +87,6 @@ const Teams = ({ }) => {
       </Container>
       {teams.length === 0 && !isCreateTeamOpen && (
         <NoTeamData createTeam={() => setIsCreateTeamOpen(true)} />
-      )}
-      {teams.length !== 0 && !isCreateTeamOpen && (
-        <Button style={{ marginLeft: '10px' }}  variant="primary" type="submit" onClick={() => setIsCreateTeamOpen(true)}>
-          Add
-        </Button>
       )}
     </>
   );
