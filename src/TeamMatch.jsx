@@ -19,6 +19,7 @@ const TeamMatch = ({ }) => {
   const [teamTwoEditCell, setTeamTwoEditCell] = useState();
   const [teamOneComplete, setTeamOneComplete] = useState(false);
   const [teamTwoComplete, setTeamTwoComplete] = useState(false);
+  const [isTie, setIsTie] = useState(false);
 
   useEffect(() => {
     if (matchTeams?.length) {
@@ -35,11 +36,30 @@ const TeamMatch = ({ }) => {
     setMatchTeams(newMatchTeams);
   };
 
+  const addOvertimeThrow = () => {
+    const newMatchTeams = [...matchTeams];
+
+    newMatchTeams.map((team) => {
+      team.players.map((player) => {
+        player.matchThrows[player.currentRound] = 0;
+      });
+    });
+
+    setMatchTeams(newMatchTeams);
+  };
+
   const completeRound = (teamId) => {
     const newMatchTeams = [...matchTeams];
     const team = newMatchTeams.find((team) => team.id === teamId);
     const currentPlayer = team.players.find((p) => p.id === team.currentPlayer);
-    const allPlayersComplete = team.players.every((p) => p.currentRound >= 11);
+
+    let allPlayersComplete = true;
+    newMatchTeams.find((team) => team.id === teamId).players.forEach((player) => {
+      if (Object.keys(player.matchThrows).length >= player.currentRound) {
+        allPlayersComplete = false;
+      }
+    });
+
     const setComplete = matchTeams[0].id === teamId ? setTeamOneComplete : setTeamTwoComplete;
 
     newMatchTeams.forEach((team) => {
@@ -56,7 +76,17 @@ const TeamMatch = ({ }) => {
     if (!allPlayersComplete && currentPlayer.currentRound > 10) {
       onEndTurn(teamId);
     } else if (allPlayersComplete) {
-      setComplete(true);
+
+      if (matchTeams[0].totalScore === matchTeams[1].totalScore) {
+        setIsTie(true);
+        addOvertimeThrow();
+        setTeamOneComplete(false);
+        setTeamTwoComplete(false);
+        onEndTurn(matchTeams[0].id);
+        onEndTurn(matchTeams[1].id);
+      } else {
+        setComplete(true);
+      }
     }
   };
 

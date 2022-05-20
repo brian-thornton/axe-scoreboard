@@ -42,6 +42,7 @@ const Teams = ({ }) => {
               style={{ width: '150px', marginLeft: '10px' }}
               variant="primary"
               type="submit"
+              disabled={teams.length <= 1}
               onClick={() => setRedirectUrl('/team-match')}
             >
               Play Team Match
