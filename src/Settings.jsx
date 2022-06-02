@@ -1,30 +1,14 @@
 import React, { useEffect, useRef, useState } from "react";
-import ReactDOM from 'react-dom';
-import { Button, Col, Container, Form, Row } from "react-bootstrap";
+import { Button, Container, Form, Row } from "react-bootstrap";
 import jsPDF from "jspdf";
-import autoTable from 'jspdf-autotable';
-import MatchHistory from "./MatchHistory";
 import html2canvas from 'html2canvas'
 
+import MatchHistory from "./MatchHistory";
 
 const Settings = ({ }) => {
   const pdfRef = useRef(null);
   const [isRendering, setIsRendering] = useState(false);
   const [wallpaperImage, setWallpaperImage] = useState(localStorage["wallpaper"]);
-
-  const handleDownload = () => {
-    const content = document.getElementById("matchHistoryExport")
-    console.log(content);
-    const doc = new jsPDF();
-    doc.html(content, {
-      callback: function (doc) {
-        doc.save('sample.pdf');
-      },
-      width: 200, // <- here
-      windowWidth: 1000 // <- here
-    });
-  };
-
 
   const downloadComponentInPDF = async (component) => {
     await html2canvas(component).then((canvas) => {
@@ -46,10 +30,6 @@ const Settings = ({ }) => {
       pdf.save('download.pdf')
       setIsRendering(false);
     })
-  }
-
-  const doStuff = () => {
-
   }
 
   useEffect(() => {

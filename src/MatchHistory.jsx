@@ -9,7 +9,7 @@ const MatchHistory = () => {
     matchHistory = JSON.parse(matchHistoryStorage);
   }
 
-  console.log(matchHistory);
+  console.log(matchHistoryStorage);
 
   return (
     <div id="matchHistory">

@@ -1,16 +1,14 @@
 import React, { useState } from 'react';
 import Button from 'react-bootstrap/Button';
 import Col from 'react-bootstrap/Col';
-import Row from 'react-bootstrap/Row';
-import Container from 'react-bootstrap/Container';
 
 import ActiveMatchTable from './ActiveMatchTable';
 import DoublePlayerTurn from './DoublePlayerTurn';
+import EditScoreControls from './EditScoreControls';
 import PlayersList from './PlayersList';
 import PlayerTurn from './PlayerTurn';
 import MatchComplete from './MatchComplete';
 import NoMatchPlayers from './NoMatchPlayers';
-import ScoreButtons from './ScoreButtons';
 import styles from './Match.module.css';
 
 const Match = ({
@@ -275,12 +273,6 @@ const Match = ({
     }
   };
 
-  const buttonColumn = (onClick, text, cols = "4") => (
-    <Col lg={cols} md={cols} sm={cols} xs={cols}>
-      <Button className={styles.button} variant="outline-primary" onClick={onClick}>{text}</Button>
-    </Col>
-  );
-
   const activeMatchTable = (
     <ActiveMatchTable
       editCell={editCell}
@@ -365,21 +357,12 @@ const Match = ({
           {players.length && <ActiveMatchTable editCell={editCell} setEditCell={setEditCell} tiedPlayers={tiedPlayers} isTie={isTie} isMatchComplete={isMatchComplete} currentPlayer={currentPlayer} currentRound={currentRound} winner={winner} players={players} />}
           {isAddPlayerOpen && <PlayersList editEnabled={false} selectEnabled={true} selectedPlayers={players} setSelectedPlayers={onSetMatchPlayers} />}
           {editCell && (
-            <Container fluid>
-              <Row>
-                <div className={styles.editingLabel}>{`Now Editing: Throw ${editCell.matchThrow} for ${editCell.player.name}`}</div>
-              </Row>
-              <Row>
-                <Col sm="3" md="3" lg="3" xl="3" />
-                <Col sm="6" md="6" lg="6" xl="6">
-                  <ScoreButtons isEdit={true} currentPlayer={editCell.player} onScore={onModifyScore} setPlayers={setPlayers} players={players} />
-                </Col>
-              </Row>
-              <Row className={styles.row}>
-                <Col sm="3" md="3" lg="3" xl="3" />
-                {buttonColumn(() => setEditCell(null), 'Cancel Edit', "6")}
-              </Row>
-            </Container>
+            <EditScoreControls
+              isEdit={true}
+              onModifyScore={onModifyScore}
+              editCell={editCell}
+              setEditCell={setEditCell}
+            />
           )}
           {!editCell && localStorage["laneConfig"] === 'singleTarget' && (
             <PlayerTurn

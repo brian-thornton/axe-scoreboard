@@ -5,8 +5,9 @@ import React, { useEffect, useState } from "react";
 import Row from "react-bootstrap/Row";
 
 import ActiveMatchTable from './ActiveMatchTable';
+import EditScoreControls from './EditScoreControls';
+import { totalScores, updateKillshots } from './playerHelper';
 import PlayerTurn from './PlayerTurn';
-import ScoreButtons from './ScoreButtons';
 import TeamSelect from './TeamSelect';
 import styles from './TeamMatch.module.css';
 
@@ -60,18 +61,18 @@ const TeamMatch = ({ }) => {
       }
     });
 
-    const setComplete = matchTeams[0].id === teamId ? setTeamOneComplete : setTeamTwoComplete;
-
-    newMatchTeams.forEach((team) => {
-      let teamScore = 0;
-      team.players.forEach((player) => {
-        teamScore += player.matchTotal;
+    const appendToExistingMatchHistory = (existingHistory, matchTeams, matchWinner) => {
+      existingHistory.push({
+        matchDate: new Date(),
+        teams: matchTeams,
+        winner: matchWinner,
       });
 
-      team.totalScore = teamScore;
-    });
+      localStorage.setItem('matchHistory', JSON.stringify(existingHistory));
+    }
 
-    setMatchTeams(newMatchTeams);
+    const setComplete = matchTeams[0].id === teamId ? setTeamOneComplete : setTeamTwoComplete;
+    setMatchTeams(totalScores(newMatchTeams));
 
     if (!allPlayersComplete && currentPlayer.currentRound > 10) {
       onEndTurn(teamId);
@@ -85,6 +86,16 @@ const TeamMatch = ({ }) => {
         onEndTurn(matchTeams[0].id);
         onEndTurn(matchTeams[1].id);
       } else {
+        const existingHistoryRaw = localStorage.getItem('matchHistory');
+        let existingHistory;
+        if (existingHistoryRaw) {
+          existingHistory = JSON.parse(existingHistoryRaw);
+        }
+
+        // if (existingHistory) {
+        //   appendToExistingMatchHistory(existingHistory, matchTeams, matchTeams[0].totalScore > matchTeams[1].totalScore ? matchTeams[0] : matchTeams[1]);
+        // } 
+
         setComplete(true);
       }
     }
@@ -127,25 +138,10 @@ const TeamMatch = ({ }) => {
       newMatchTeams[1].players = newPlayers;
     }
 
-    newMatchTeams.forEach((team) => {
-      let teamScore = 0;
-      team.players.forEach((player) => {
-        teamScore += player.matchTotal;
-      });
-
-      team.totalScore = teamScore;
-    });
-
-    setMatchTeams(newMatchTeams);
+    setMatchTeams(totalScores(newMatchTeams));
     setTeamOneEditCell(null);
     setTeamTwoEditCell(null);
   };
-
-  const buttonColumn = (onClick, text, cols = "4") => (
-    <Col lg={cols} md={cols} sm={cols} xs={cols}>
-      <Button className={styles.button} variant="outline-primary" onClick={onClick}>{text}</Button>
-    </Col>
-  );
 
   return (
     <>
@@ -189,25 +185,12 @@ const TeamMatch = ({ }) => {
                     <h1>Waiting on Other Team</h1>
                   )}
                   {!teamOneComplete && teamOneEditCell && (
-                    <Container fluid>
-                      <Row>
-                        <div className={styles.editingLabel}>{`Now Editing: Throw ${teamOneEditCell.matchThrow} for ${teamOneEditCell.player.name}`}</div>
-                      </Row>
-                      <Row>
-                        <Col sm="3" md="3" lg="3" xl="3" />
-                        <Col sm="6" md="6" lg="6" xl="6">
-                          <ScoreButtons
-                            isEdit={true}
-                            currentPlayer={teamOneEditCell.player}
-                            onScore={onModifyScore}
-                          />
-                        </Col>
-                      </Row>
-                      <Row className={styles.row}>
-                        <Col sm="3" md="3" lg="3" xl="3" />
-                        {buttonColumn(() => setTeamOneEditCell(null), 'Cancel Edit', "6")}
-                      </Row>
-                    </Container>
+                    <EditScoreControls
+                      isEdit={true}
+                      onModifyScore={onModifyScore}
+                      editCell={teamOneEditCell}
+                      setEditCell={setTeamOneEditCell}
+                    />
                   )}
                   {!teamOneComplete && !teamOneEditCell && (
                     <PlayerTurn
@@ -228,25 +211,12 @@ const TeamMatch = ({ }) => {
                     <h1>Waiting on Other Team</h1>
                   )}
                   {!teamTwoComplete && teamTwoEditCell && (
-                    <Container fluid>
-                      <Row>
-                        <div className={styles.editingLabel}>{`Now Editing: Throw ${teamTwoEditCell.matchThrow} for ${teamTwoEditCell.player.name}`}</div>
-                      </Row>
-                      <Row>
-                        <Col sm="3" md="3" lg="3" xl="3" />
-                        <Col sm="6" md="6" lg="6" xl="6">
-                          <ScoreButtons
-                            isEdit={true}
-                            currentPlayer={teamTwoEditCell.player}
-                            onScore={onModifyScore}
-                          />
-                        </Col>
-                      </Row>
-                      <Row className={styles.row}>
-                        <Col sm="3" md="3" lg="3" xl="3" />
-                        {buttonColumn(() => setTeamTwoEditCell(null), 'Cancel Edit', "6")}
-                      </Row>
-                    </Container>
+                    <EditScoreControls
+                      isEdit={true}
+                      onModifyScore={onModifyScore}
+                      editCell={teamTwoEditCell}
+                      setEditCell={setTeamTwoEditCell}
+                    />
                   )}
                   {!teamTwoComplete && !teamTwoEditCell && (
                     <PlayerTurn

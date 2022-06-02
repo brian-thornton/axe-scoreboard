@@ -11,11 +11,13 @@ const Leaderboard = ({ startMatch, matchPlayers, setMatchPlayers }) => {
     const players = [];
 
     matchHistory.map((match) => {
-      match.players.map((player) => {
-        if (!players.map((p) => p.id).includes(player.id)) {
-          players.push(player);
-        }
-      });
+      if (!match.teams) {
+        match.players?.map((player) => {
+          if (!players.map((p) => p.id).includes(player.id)) {
+            players.push(player);
+          }
+        });
+      }
     });
 
     return players;
@@ -25,7 +27,7 @@ const Leaderboard = ({ startMatch, matchPlayers, setMatchPlayers }) => {
     let wins = 0;
 
     matchHistory.map((match) => {
-      match.players.map((matchPlayer) => {
+      match.players?.map((matchPlayer) => {
         if (matchPlayer.id === player.id) {
           wins += match.winner.id === matchPlayer.id ? 1 : 0;
         }
@@ -39,7 +41,7 @@ const Leaderboard = ({ startMatch, matchPlayers, setMatchPlayers }) => {
     let losses = 0;
 
     matchHistory.map((match) => {
-      match.players.map((matchPlayer) => {
+      match.players?.map((matchPlayer) => {
         if (matchPlayer.id === player.id) {
           losses += match.winner.id === matchPlayer.id ? 0 : 1;
         }

@@ -6,11 +6,17 @@ import Target from "./Target";
 import ScoreButtons from "./ScoreButtons";
 
 const PlayerTurn = ({ endTurn, teamId, showTarget = true, showEndMatch = true, isTie, tiedPlayers, currentPlayer, players, currentRound, setPlayers, completeRound, handleEndMatch }) => {
+  let otherPlayersComplete = true;
+  players.forEach((player) => {
+    if (player.id !== currentPlayer.id && Object.keys(player.matchThrows).length >= player.currentRound) {
+      otherPlayersComplete = false;
+    }
+  });
+  
   const recordScore = (score, isKillshot) => {
     const newPlayers = [...players];
     const player = newPlayers.find((player) => player.id === currentPlayer?.id);
-    console.log(score);
-    console.log(currentRound);
+
     if (score === 'drop') {
       player.matchThrows[currentRound] = 0;
       player.dropped = true;
@@ -55,9 +61,9 @@ const PlayerTurn = ({ endTurn, teamId, showTarget = true, showEndMatch = true, i
     e.stopPropagation();
   };
 
-  const buttonColumn = (onClick, text, cols = "4") => (
+  const buttonColumn = (onClick, text, cols = "4", disabled = false) => (
     <Col lg={cols} md={cols} sm={cols} xs={cols}>
-      <Button style={{ width: '100%' }} variant="outline-primary" onClick={onClick}>{text}</Button>
+      <Button disabled={disabled} style={{ width: '100%' }} variant="outline-primary" onClick={onClick}>{text}</Button>
     </Col>
   );
 
@@ -67,7 +73,7 @@ const PlayerTurn = ({ endTurn, teamId, showTarget = true, showEndMatch = true, i
   return (
     <Container>
       <Row>
-        <div style={{ fontSize: 30, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>{`Now Throwing: ${currentPlayer?.name}`}</div>
+        <h4 style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>{`Now Throwing: ${currentPlayer?.name}`}</h4>
       </Row>
       <Row>
         {showTarget && (
@@ -87,7 +93,7 @@ const PlayerTurn = ({ endTurn, teamId, showTarget = true, showEndMatch = true, i
                 )}
                 {endTurn && (
                   <Row className={styles.buttonRow}>
-                    {buttonColumn(() => endTurn(teamId), 'End Turn', "12")}
+                    {buttonColumn(() => endTurn(teamId), 'End Turn', "12", otherPlayersComplete)}
                   </Row>
                 )}
               </>
