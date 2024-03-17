@@ -4,10 +4,10 @@ import Col from 'react-bootstrap/Col';
 import React, { useEffect, useState } from "react";
 import Row from "react-bootstrap/Row";
 
-import ActiveMatchTable from './ActiveMatchTable';
-import EditScoreControls from './EditScoreControls';
+import ActiveMatchTable from './ActiveMatchTable/ActiveMatchTable';
+import EditScoreControls from './EditScoreControls/EditScoreControls';
 import { totalScores, updateKillshots } from './playerHelper';
-import PlayerTurn from './PlayerTurn';
+import PlayerTurn from './PlayerTurn/PlayerTurn';
 import TeamSelect from './TeamSelect';
 import styles from './TeamMatch.module.css';
 

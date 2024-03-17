@@ -3,7 +3,7 @@ import { Routes, Route } from "react-router-dom";
 import AxeNav from "./AxeNav";
 import MatchHistory from "./MatchHistory";
 import MatchManager from "./MatchManager";
-import Players from "./Players";
+import Players from "./Players/Players";
 import Settings from "./Settings";
 import Teams from "./Teams";
 import TeamMatch from "./TeamMatch";

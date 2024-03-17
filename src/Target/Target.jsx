@@ -14,10 +14,7 @@ const Target = ({ handleRingClick }) => {
                   <div onClick={(e) => handleRingClick(e, 3)} className={styles.ring}>
                     <div onClick={(e) => handleRingClick(e, 4)} className={styles.fourLine}>
                       <div onClick={(e) => handleRingClick(e, 4)} className={styles.ring} >
-                        <div onClick={(e) => handleRingClick(e, 5)} className={styles.fiveLine}>
-                          <div onClick={(e) => handleRingClick(e, 5)} className={styles.ring}>
-                            <div onClick={(e) => handleRingClick(e, 6)} className={styles.bull}>
-                            </div>
+                        <div onClick={(e) => handleRingClick(e, 6)} className={styles.fiveLine}>
                           </div>
                         </div>
                       </div>
@@ -28,7 +25,6 @@ const Target = ({ handleRingClick }) => {
             </div>
           </div>
         </div>
-      </div>
     </>
   );
 }

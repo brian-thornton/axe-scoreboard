@@ -2,8 +2,8 @@ import React, { useState } from "react";
 import { Button, Container, Row, Col } from "react-bootstrap";
 
 import styles from './PlayerTurn.module.css';
-import Target from "./Target";
-import ScoreButtons from "./ScoreButtons";
+import Target from "../Target/Target";
+import ScoreButtons from "../ScoreButtons/ScoreButtons";
 
 const PlayerTurn = ({ endTurn, teamId, showTarget = true, showEndMatch = true, isTie, tiedPlayers, currentPlayer, players, currentRound, setPlayers, completeRound, handleEndMatch }) => {
   let otherPlayersComplete = true;

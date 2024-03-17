@@ -1,8 +1,8 @@
 import React, {  useState } from 'react';
 import { Button } from 'react-bootstrap';
 
-import Match from './Match';
-import Leaderboard from './Leaderboard';
+import Match from './Match/Match';
+import Leaderboard from './Leaderboard/Leaderboard';
 
 const MatchManager = () => {
   const [isMatchStarted, setIsMatchStarted] = useState(false);

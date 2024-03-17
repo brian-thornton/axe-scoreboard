@@ -1,10 +1,14 @@
-import React from "react";
+import {FC} from "react";
 import Button from 'react-bootstrap/Button';
 import Card from "react-bootstrap/Card";
 import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
 
-const NoMatchPlayers = ({ setIsAddPlayerOpen }) => {
+type NoMatchPlayersProps = {
+  setIsAddPlayerOpen: (value: boolean) => void;
+}
+
+const NoMatchPlayers: FC<NoMatchPlayersProps> = ({ setIsAddPlayerOpen }) => {
   return (
     <Card style={{ height: '70vh', marginTop: '20px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
       <Card.Body style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>

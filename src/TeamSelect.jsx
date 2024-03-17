@@ -8,7 +8,7 @@ import ListGroup from 'react-bootstrap/ListGroup';
 import React, { useState } from "react";
 import { Navigate } from 'react-router-dom';
 
-import { loadFromStorage } from './dataHelper';
+import { loadFromStorage } from './helpers/dataHelper';
 import { Controller } from 'react-bootstrap-icons';
 
 const TeamSelect = ({ setSelectedTeams }) => {

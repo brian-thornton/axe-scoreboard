@@ -9,8 +9,6 @@ const MatchHistory = () => {
     matchHistory = JSON.parse(matchHistoryStorage);
   }
 
-  console.log(matchHistoryStorage);
-
   return (
     <div id="matchHistory">
       {!matchHistory?.length && <NoMatchHistory />}

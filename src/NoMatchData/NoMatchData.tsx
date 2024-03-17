@@ -1,13 +1,17 @@
 import Button from 'react-bootstrap/Button';
 import Card from "react-bootstrap/Card";
 import Container from "react-bootstrap/Container";
-import React from "react";
+import {FC} from "react";
 import { Row } from "react-bootstrap";
 
-import logo from "./target.svg";
+import logo from "../target.svg";
 import styles from './NoMatchData.module.css';
 
-const NoMatchData = ({ startMatch }) => {
+type NoMatchDataProps = {
+  startMatch: () => void;
+};
+
+const NoMatchData: FC<NoMatchDataProps> = ({ startMatch }) => {
   return (
     <Card className={styles.noHistoryCard}>
       <Card.Body className={styles.noHistoryCardBody}>

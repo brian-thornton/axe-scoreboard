@@ -9,11 +9,7 @@ const ScoreButtons = ({ onScore, currentPlayer, isEdit, setPlayers, players }) =
   const [activeKillshot, setActiveKillshot] = useState();
 
   const toggleKillshot = (killshotNumber) => {
-    if (activeKillshot === killshotNumber) {
-      setActiveKillshot(null);
-    } else {
-      setActiveKillshot(killshotNumber);
-    }
+    setActiveKillshot(activeKillshot === killshotNumber ? null : killshotNumber);
   };
 
   const activateKillshotButton = (killshotNumber, enabled = false) => {
@@ -94,7 +90,7 @@ const ScoreButtons = ({ onScore, currentPlayer, isEdit, setPlayers, players }) =
             {[1, 2, 3].map((score) => buttonColumn(() => onScore(score), `${score}`))}
           </Row>
           <Row className={styles.buttonRow}>
-            {[4, 5, 6].map((score) => buttonColumn(() => onScore(score), `${score}`))}
+            {[4, 6].map((score) => buttonColumn(() => onScore(score), `${score}`, '6'))}
           </Row>
           <Row className={styles.buttonRow}>
             {buttonColumn(() => onScore('drop'), 'Drop', '6')}

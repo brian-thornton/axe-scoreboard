@@ -7,7 +7,7 @@ import { Navigate } from 'react-router-dom';
 import React, { useEffect, useState } from "react";
 
 import CreateTeam from './CreateTeam';
-import NoTeamData from './NoTeamData';
+import NoTeamData from './NoTeamData/NoTeamData';
 
 const Teams = ({ }) => {
   const [teams, setTeams] = useState([]);

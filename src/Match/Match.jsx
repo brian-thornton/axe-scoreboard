@@ -2,14 +2,15 @@ import React, { useState } from 'react';
 import Button from 'react-bootstrap/Button';
 import Col from 'react-bootstrap/Col';
 
-import ActiveMatchTable from './ActiveMatchTable';
-import DoublePlayerTurn from './DoublePlayerTurn';
-import EditScoreControls from './EditScoreControls';
-import PlayersList from './PlayersList';
-import PlayerTurn from './PlayerTurn';
-import MatchComplete from './MatchComplete';
-import NoMatchPlayers from './NoMatchPlayers';
+import ActiveMatchTable from '../ActiveMatchTable/ActiveMatchTable';
+import DoublePlayerTurn from '../DoublePlayerTurn';
+import EditScoreControls from '../EditScoreControls/EditScoreControls';
+import PlayersList from '../PlayersList';
+import PlayerTurn from '../PlayerTurn/PlayerTurn';
+import MatchComplete from '../MatchComplete/MatchComplete';
+import NoMatchPlayers from '../NoMatchPlayers/NoMatchPlayers';
 import styles from './Match.module.css';
+import { appendToExistingMatchHistory, formatMatchHistory, identifyMatchWinner, initializeMatchPlayers, zeroScores } from '../helpers/match-helper';
 
 const Match = ({
   matchPlayers,
@@ -39,7 +40,7 @@ const Match = ({
   };
 
   const startNextMatch = () => {
-    zeroScores();
+    zeroScores(players);
     setCurrentRound(1);
     setIsTie(false)
     setTiedPlayers([]);
@@ -54,30 +55,6 @@ const Match = ({
     setIsMatchComplete(false);
     setWinner(undefined);
   };
-
-  const zeroScores = () => {
-    players.map((player) => {
-      player.matchThrows = {
-        1: 0,
-        2: 0,
-        3: 0,
-        4: 0,
-        5: 0,
-        6: 0,
-        7: 0,
-        8: 0,
-        9: 0,
-        10: 0,
-      };
-      player.dropped = false;
-      player.matchTotal = 0;
-      player.remainingKillshots = 2;
-      player.totalKillshots = 2;
-      player.killshotOneEnabled = true;
-      player.killshotTwoEnabled = false;
-      player.killshotThreeEnabled = false;
-    });
-  }
 
   const playersDefined = players.filter((player) => player.name !== '').length > 0;
 
@@ -95,50 +72,14 @@ const Match = ({
     }
   };
 
-  const appendToExistingMatchHistory = (existingHistory, players, matchWinner) => {
-    existingHistory.push({
-      matchDate: new Date(),
-      players: players.map((player) => {
-        return {
-          id: player.id,
-          name: player.name,
-          matchThrows: player.matchThrows,
-          matchTotal: player.matchTotal,
-        };
-      }),
-      winner: matchWinner,
-    });
-
-    localStorage.setItem('matchHistory', JSON.stringify(existingHistory));
-  }
-
   const completeMatch = () => {
     setIsMatchComplete(true);
 
     if (players.length > 1) {
-      const matchWinner = players.reduce(function (prev, current) {
-        if (+current.matchTotal > +prev.matchTotal) {
-          return current;
-        } else {
-          return prev;
-        }
-      });
-
+      const matchWinner = identifyMatchWinner(players);
       setWinner(matchWinner);
 
-      const newMatchHistory = [...matchHistory];
-      newMatchHistory.push({
-        matchDate: new Date(),
-        players: players.map((player) => {
-          return {
-            id: player.id,
-            name: player.name,
-            matchThrows: player.matchThrows,
-            matchTotal: player.matchTotal,
-          };
-        }),
-        winner: matchWinner,
-      });
+      const newMatchHistory = formatMatchHistory(matchHistory, players, matchWinner);
       setMatchHistory(newMatchHistory);
 
       const existingHistoryRaw = localStorage.getItem('matchHistory');
@@ -300,37 +241,11 @@ const Match = ({
   };
 
   const onSetMatchPlayers = (pendingMatchPlayers) => {
-    const playersReadyForMatch = pendingMatchPlayers.map((pending) => {
-      return {
-        id: pending.id,
-        name: pending.name,
-        matchThrows: {
-          1: 0,
-          2: 0,
-          3: 0,
-          4: 0,
-          5: 0,
-          6: 0,
-          7: 0,
-          8: 0,
-          9: 0,
-          10: 0,
-        },
-        dropped: false,
-        matchTotal: 0,
-        remainingKillshots: 2,
-        totalKillshots: 2,
-        killshotOneEnabled: true,
-        killshotTwoEnabled: false,
-        killshotThreeEnabled: false,
-      }
-    });
-
-    setPlayers(playersReadyForMatch);
+    setPlayers(initializeMatchPlayers(pendingMatchPlayers));
   };
 
   return (
-    <>
+    <div className={styles.matchContainer}>
       {!playersDefined && (
         <>
           {!isAddPlayerOpen && <NoMatchPlayers setIsAddPlayerOpen={setIsAddPlayerOpen} />}
@@ -393,7 +308,7 @@ const Match = ({
           <MatchComplete goToLeaderboard={goToLeaderboard} startNextMatch={startNextMatch} players={players} winner={winner} />
         </>
       )}
-    </>
+    </div>
   );
 };
 

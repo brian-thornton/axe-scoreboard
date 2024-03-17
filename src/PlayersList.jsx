@@ -1,9 +1,11 @@
 import Form from "react-bootstrap/Form";
 import React, { useEffect, useState } from "react";
 import Table from 'react-bootstrap/Table';
+import loadFromStorage from './helpers/dataHelper';
 
 const PlayersList = ({ selectedPlayers, setSelectedPlayers, selectEnabled, editEnabled, selectedPlayer, setSelectedPlayer }) => {
   const [players, setPlayers] = useState([]);
+  const [matchHistory, setMatchHistory] = useState([]);
 
   const loadExistingPlayers = () => {
     const existingPlayersRaw = localStorage.getItem('players');
@@ -14,7 +16,10 @@ const PlayersList = ({ selectedPlayers, setSelectedPlayers, selectEnabled, editE
     }
   };
 
-  useEffect(loadExistingPlayers, []);
+  useEffect(() => {
+    loadExistingPlayers();
+    setMatchHistory(loadFromStorage('matchHistory'));
+  }, []);
 
   const togglePlayerSelect = (event, player) => {
     if (event.target.checked) {
@@ -33,6 +38,9 @@ const PlayersList = ({ selectedPlayers, setSelectedPlayers, selectEnabled, editE
 
     players.map((player) => {
       if (player.name !== '') {
+        const matchesWon = matchHistory.filter((match) => match.winner.id === player.id).length;
+        const matchesLost = matchHistory.filter((match) => match.winner.id !== player.id && match.players.map((p) => p.id).includes(player.id)).length;
+
         rows.push(
           <tr onClick={() => {
             if (editEnabled) {
@@ -40,8 +48,8 @@ const PlayersList = ({ selectedPlayers, setSelectedPlayers, selectEnabled, editE
             }
           }} key={player.id}>
             <td>{player.name}</td>
-            <td></td>
-            <td></td>
+            <td>{matchesWon}</td>
+            <td>{matchesLost}</td>
             {selectEnabled && (
               <td>
                 <Form.Check
@@ -61,7 +69,7 @@ const PlayersList = ({ selectedPlayers, setSelectedPlayers, selectEnabled, editE
   }
 
   return (
-    <>
+    <div>
       <Table striped bordered hover>
         <thead>
           <tr>
@@ -74,7 +82,7 @@ const PlayersList = ({ selectedPlayers, setSelectedPlayers, selectEnabled, editE
           {rows()}
         </tbody>
       </Table>
-    </>
+    </div>
   )
 };
 

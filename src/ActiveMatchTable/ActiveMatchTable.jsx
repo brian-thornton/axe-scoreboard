@@ -12,36 +12,39 @@ const ActiveMatchTable = ({ framesToDisplay, setEditCell, editCell, isMatchCompl
     });
   };
 
+  const renderCell = (player, matchThrow, className = '') => (
+    <td className={className} onClick={() => onCellClick(player, matchThrow)}>
+      {player.matchThrows[matchThrow]}
+    </td>
+  );
+  
   const roundCell = (player, matchThrow, index) => {
-    if (isTie && index >= 10 && !tiedPlayers.filter((t) => t.id === player.id).length) {
-      return <td onClick={() => onCellClick(player, matchThrow)}>{player.matchThrows[matchThrow]}</td>
-    } else {
-      if (editCell && editCell.player === player && editCell.matchThrow === matchThrow && matchThrow < currentRound) {
-        return (
-          <td className={styles.edit}>
-            {player.matchThrows[matchThrow]}
-          </td>
-        );
-      } else {
-        if (!isMatchComplete && currentPlayer?.id === player.id && currentRound.toString() === matchThrow.toString()) {
-          return <td className={styles.active}>{player.matchThrows[matchThrow]}</td>
-        } else if (player.matchThrows[matchThrow] === 6) {
-          return <td className={styles.bull} onClick={() => onCellClick(player, matchThrow)}>{player.matchThrows[matchThrow]}</td>
-        } else if (player.matchThrows[matchThrow] === 8) {
-          return <td className={styles.killshot} onClick={() => onCellClick(player, matchThrow)}>{player.matchThrows[matchThrow]}</td>
-        } else {
-          return <td onClick={() => onCellClick(player, matchThrow)}>{player.matchThrows[matchThrow]}</td>
-        }
-      }
+    const isPlayerTied = tiedPlayers.some((t) => t.id === player.id);
+    const isEditing = editCell && editCell.player === player && editCell.matchThrow === matchThrow;
+    const isActive = !isMatchComplete && currentPlayer?.id === player.id && currentRound.toString() === matchThrow.toString();
+    const isBull = player.matchThrows[matchThrow] === 6;
+    const isKillshot = player.matchThrows[matchThrow] === 8;
+  
+    let className = '';
+  
+    if (isTie && index >= 10 && !isPlayerTied) {
+      className = '';
+    } else if (isEditing && matchThrow < currentRound) {
+      className = styles.edit;
+    } else if (isActive) {
+      className = styles.active;
+    } else if (isBull) {
+      className = styles.bull;
+    } else if (isKillshot) {
+      className = styles.killshot;
     }
+  
+    return renderCell(player, matchThrow, className);
   };
 
   const totalCell = (player) => {
-    if (winner?.id === player.id) {
-      return <td className={styles.winner}>{player.matchTotal}</td>
-    } else {
-      return <td>{player.matchTotal}</td>
-    }
+    const className = winner?.id === player.id ? styles.winner : '';
+    return <td className={className}>{player.matchTotal}</td>
   };
 
   const playerName = (player) => {

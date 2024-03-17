@@ -4,7 +4,7 @@ import Col from 'react-bootstrap/Col';
 import React from "react";
 import Row from "react-bootstrap/Row";
 
-import ScoreButtons from './ScoreButtons';
+import ScoreButtons from '../ScoreButtons/ScoreButtons';
 import styles from './EditScoreControls.module.css';
 
 const EditScoreControls = ({ isEdit, editCell, onModifyScore, setEditCell }) => {

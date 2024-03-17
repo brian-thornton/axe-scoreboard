@@ -1,14 +1,22 @@
 import Button from 'react-bootstrap/Button';
 import Form from "react-bootstrap/Form";
-import React from "react";
+import {FC} from "react";
 import Table from "react-bootstrap/Table";
 
-import NoMatchData from './NoMatchData';
+import NoMatchData from '../NoMatchData/NoMatchData';
+import { IMatchHistory, IPlayer } from 'interface';
+
 import styles from './Leaderboard.module.css';
 
-const Leaderboard = ({ startMatch, matchPlayers, setMatchPlayers }) => {
+type LeaderboardProps = {
+  startMatch: () => void;
+  matchPlayers: any;
+  setMatchPlayers: any;
+}
+
+const Leaderboard: FC<LeaderboardProps> = ({ startMatch, matchPlayers, setMatchPlayers }) => {
   const uniqueListOfPlayers = () => {
-    const players = [];
+    const players = Array<IPlayer>();
 
     matchHistory.map((match) => {
       if (!match.teams) {
@@ -23,7 +31,7 @@ const Leaderboard = ({ startMatch, matchPlayers, setMatchPlayers }) => {
     return players;
   };
 
-  const getPlayerWins = (player) => {
+  const getPlayerWins = (player: IPlayer) => {
     let wins = 0;
 
     matchHistory.map((match) => {
@@ -37,7 +45,7 @@ const Leaderboard = ({ startMatch, matchPlayers, setMatchPlayers }) => {
     return wins;
   };
 
-  const getPlayerLosses = (player) => {
+  const getPlayerLosses = (player: IPlayer) => {
     let losses = 0;
 
     matchHistory.map((match) => {
@@ -52,7 +60,7 @@ const Leaderboard = ({ startMatch, matchPlayers, setMatchPlayers }) => {
   };
 
   const rows = () => {
-    const rows = [];
+    const rows = Array<JSX.Element>();
 
     uniqueListOfPlayers().map((player) => {
       if (player.name !== '') {
@@ -82,13 +90,13 @@ const Leaderboard = ({ startMatch, matchPlayers, setMatchPlayers }) => {
   }
 
   const matchHistoryStorage = localStorage.getItem('matchHistory');
-  let matchHistory = [];
+  let matchHistory = Array<IMatchHistory>();
   if (matchHistoryStorage) {
     matchHistory = JSON.parse(matchHistoryStorage);
   }
 
   return (
-    <>
+    <div className={styles.leaderboardContainer}>
       {matchHistory?.length > 0 && (
         <>
           <Table striped bordered hover>
@@ -107,7 +115,7 @@ const Leaderboard = ({ startMatch, matchPlayers, setMatchPlayers }) => {
         </>
       )}
       {!matchHistory?.length && <NoMatchData startMatch={startMatch} />}
-    </>
+    </div>
   );
 };
 
