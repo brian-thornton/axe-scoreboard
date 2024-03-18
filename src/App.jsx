@@ -5,7 +5,7 @@ import MatchHistory from "./MatchHistory";
 import MatchManager from "./MatchManager";
 import Players from "./Players/Players";
 import Settings from "./Settings";
-import Teams from "./Teams";
+import Teams from "./Teams/Teams";
 import TeamMatch from "./TeamMatch";
 
 function App() {

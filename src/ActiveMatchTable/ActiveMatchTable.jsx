@@ -4,7 +4,6 @@ import Table from "react-bootstrap/Table";
 import styles from './ActiveMatchTable.module.css';
 
 const ActiveMatchTable = ({ framesToDisplay, setEditCell, editCell, isMatchComplete, currentPlayer, currentRound, winner, players, isTie, tiedPlayers }) => {
-
   const onCellClick = (player, matchThrow) => {
     setEditCell({
       player,
@@ -19,7 +18,7 @@ const ActiveMatchTable = ({ framesToDisplay, setEditCell, editCell, isMatchCompl
   );
   
   const roundCell = (player, matchThrow, index) => {
-    const isPlayerTied = tiedPlayers.some((t) => t.id === player.id);
+    const isPlayerTied = tiedPlayers?.some((t) => t.id === player.id);
     const isEditing = editCell && editCell.player === player && editCell.matchThrow === matchThrow;
     const isActive = !isMatchComplete && currentPlayer?.id === player.id && currentRound.toString() === matchThrow.toString();
     const isBull = player.matchThrows[matchThrow] === 6;
@@ -59,7 +58,6 @@ const ActiveMatchTable = ({ framesToDisplay, setEditCell, editCell, isMatchCompl
 
   const playerRows = () => {
     const rows = [];
-
     players.filter((p) => p.name !== '').map((player) => {
       return rows.push(
         <tr key={player.id}>

@@ -6,8 +6,9 @@ import Table from 'react-bootstrap/Table';
 import { Navigate } from 'react-router-dom';
 import React, { useEffect, useState } from "react";
 
-import CreateTeam from './CreateTeam';
-import NoTeamData from './NoTeamData/NoTeamData';
+import CreateTeam from '../CreateTeam';
+import NoTeamData from '../NoTeamData/NoTeamData';
+import styles from './Teams.module.css';
 
 const Teams = ({ }) => {
   const [teams, setTeams] = useState([]);
@@ -25,7 +26,7 @@ const Teams = ({ }) => {
   useEffect(loadExistingTeams, []);
 
   return (
-    <>
+    <div className={styles.teamsContainer}>
       {redirectUrl && (<Navigate to={redirectUrl} />)} 
       <Container fluid>
         {teams.length !== 0 && !isCreateTeamOpen && (
@@ -89,7 +90,7 @@ const Teams = ({ }) => {
       {teams.length === 0 && !isCreateTeamOpen && (
         <NoTeamData createTeam={() => setIsCreateTeamOpen(true)} />
       )}
-    </>
+    </div>
   );
 };
 

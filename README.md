@@ -3,9 +3,15 @@
 ## Overview
 This application is intended for use as an axe throwing scoreboard for home axe throwers.
 
+### Individual Match
 ![match](./doc/match.png)
+
+### Team Match
+![team](./doc/team.png)
+
+### Match History
 ![history](./doc/match_history.png)
-![start match](./doc/start_match.png)
+
 
 ## Getting Started
 
@@ -17,3 +23,7 @@ node v18.14.0
 `cd axe-scoreboard`\
 `npm install`\
 `npm start`
+
+### Notes
+NOTE: All data is stored in browser localStorage. If you clear your browser cache all match history and player data will be LOST. 
+
