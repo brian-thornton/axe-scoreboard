@@ -12,8 +12,9 @@ This application is intended for use as an axe throwing scoreboard for home axe 
 ### Match History
 ![history](./doc/match_history.png)
 
-
 ## Getting Started
+
+You can access the axe scoreboard at https://axe-scoreboard.vercel.app/ or install and run locally using the instructions below.
 
 ### Prerequisites
 node v18.14.0
