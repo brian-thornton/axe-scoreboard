@@ -77,9 +77,9 @@ const PlayerTurn = ({ endTurn, teamId, showTarget = true, showEndMatch = true, i
       </Row>
       <Row>
         {showTarget && (
-          <Col lg="6" md="6" sm="6" xs="6">
-            <Target style={{ width: '100%' }} handleRingClick={handleRingClick} />
-          </Col>
+          <div className={styles.target}>
+            <Target handleRingClick={handleRingClick} />
+          </div>
         )}
         {!isTie && (
           <Col lg={scoreButtonsColWidth} md={scoreButtonsColWidth} sm={scoreButtonsColWidth} xs={scoreButtonsColWidth}>

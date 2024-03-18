@@ -1,3 +1,14 @@
 .buttonRow {
   margin-top: 10px !important;
 }
+
+.target {
+  display: flex;
+  max-width: 30% !important;
+}
+
+@media screen and (max-width: 600px) {
+  .target {
+    display: none; 
+  }
+}
