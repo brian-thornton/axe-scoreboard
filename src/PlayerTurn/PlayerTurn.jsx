@@ -12,7 +12,7 @@ const PlayerTurn = ({ endTurn, teamId, showTarget = true, showEndMatch = true, i
       otherPlayersComplete = false;
     }
   });
-  
+
   const recordScore = (score, isKillshot) => {
     const newPlayers = [...players];
     const player = newPlayers.find((player) => player.id === currentPlayer?.id);
@@ -71,34 +71,26 @@ const PlayerTurn = ({ endTurn, teamId, showTarget = true, showEndMatch = true, i
   const marginTop = showTarget ? "50px" : "0px";
 
   return (
-    <Container>
-      <Row>
-        <h4 style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>{`Now Throwing: ${currentPlayer?.name}`}</h4>
-      </Row>
-      <Row>
-        {showTarget && (
-          <div className={styles.target}>
-            <Target handleRingClick={handleRingClick} />
-          </div>
-        )}
+    <div className={styles.outerContainer}>
+      <h4>{`Now Throwing: ${currentPlayer?.name}`}</h4>
+      <div className={styles.innerContainer}>
+        <div className={styles.target}>
+          <Target handleRingClick={handleRingClick} />
+        </div>
         {!isTie && (
-          <Col lg={scoreButtonsColWidth} md={scoreButtonsColWidth} sm={scoreButtonsColWidth} xs={scoreButtonsColWidth}>
-            <Container fluid style={{ marginTop }}>
+          <div className={styles.buttonContainer}>
+            <ScoreButtons currentPlayer={currentPlayer} onScore={recordScore} />
+            {showEndMatch && (
               <>
-                <ScoreButtons currentPlayer={currentPlayer} onScore={recordScore} />
-                {showEndMatch && (
-                  <Row className={styles.buttonRow}>
-                    {buttonColumn(handleEndMatch, 'End Match', "12")}
-                  </Row>
-                )}
-                {endTurn && (
-                  <Row className={styles.buttonRow}>
-                    {buttonColumn(() => endTurn(teamId), 'End Turn', "12", otherPlayersComplete)}
-                  </Row>
-                )}
+                {buttonColumn(handleEndMatch, 'End Match', "12")}
               </>
-            </Container>
-          </Col>
+            )}
+            {endTurn && (
+              <Row className={styles.buttonRow}>
+                {buttonColumn(() => endTurn(teamId), 'End Turn', "12", otherPlayersComplete)}
+              </Row>
+            )}
+          </div>
         )}
         {isTie && (
           <Col lg={scoreButtonsColWidth} md={scoreButtonsColWidth} sm={scoreButtonsColWidth} xs={scoreButtonsColWidth}>
@@ -120,8 +112,8 @@ const PlayerTurn = ({ endTurn, teamId, showTarget = true, showEndMatch = true, i
             </Row>
           </Col>
         )}
-      </Row>
-    </Container >
+      </div>
+    </div>
   )
 };
 

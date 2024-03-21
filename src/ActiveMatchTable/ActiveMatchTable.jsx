@@ -16,16 +16,16 @@ const ActiveMatchTable = ({ framesToDisplay, setEditCell, editCell, isMatchCompl
       {player.matchThrows[matchThrow]}
     </td>
   );
-  
+
   const roundCell = (player, matchThrow, index) => {
     const isPlayerTied = tiedPlayers?.some((t) => t.id === player.id);
     const isEditing = editCell && editCell.player === player && editCell.matchThrow === matchThrow;
     const isActive = !isMatchComplete && currentPlayer?.id === player.id && currentRound.toString() === matchThrow.toString();
     const isBull = player.matchThrows[matchThrow] === 6;
     const isKillshot = player.matchThrows[matchThrow] === 8;
-  
+
     let className = '';
-  
+
     if (isTie && index >= 10 && !isPlayerTied) {
       className = '';
     } else if (isEditing && matchThrow < currentRound) {
@@ -37,7 +37,7 @@ const ActiveMatchTable = ({ framesToDisplay, setEditCell, editCell, isMatchCompl
     } else if (isKillshot) {
       className = styles.killshot;
     }
-  
+
     return renderCell(player, matchThrow, className);
   };
 
@@ -74,24 +74,26 @@ const ActiveMatchTable = ({ framesToDisplay, setEditCell, editCell, isMatchCompl
   };
 
   return (
-    <Table striped bordered hover style={{ backgroundImage: 'linear-gradient(to top, #a6a6aa, #bcbcbf, #d2d2d4, #e8e8e9, #ffffff);' }}>
-      <thead>
-        <tr>
-          <th>Name</th>
-          {Object.keys(players[0].matchThrows).map((matchThrow) => {
-            if (matchThrow > 10) {
-              return <th>{`Overtime`}</th>
-            }
+    <div className={styles.tableContainer}>
+      <Table striped bordered hover style={{ backgroundImage: 'linear-gradient(to top, #a6a6aa, #bcbcbf, #d2d2d4, #e8e8e9, #ffffff);' }}>
+        <thead>
+          <tr>
+            <th>Name</th>
+            {Object.keys(players[0].matchThrows).map((matchThrow) => {
+              if (matchThrow > 10) {
+                return <th>{`Overtime`}</th>
+              }
 
-            return <th>{matchThrow}</th>
-          })}
-          <th>Total</th>
-        </tr>
-      </thead>
-      <tbody>
-        {playerRows()}
-      </tbody>
-    </Table>
+              return <th>{matchThrow}</th>
+            })}
+            <th>Total</th>
+          </tr>
+        </thead>
+        <tbody>
+          {playerRows()}
+        </tbody>
+      </Table>
+    </div>
   );
 };
 

@@ -1,27 +1,44 @@
 .active {
    background-color: #4dff00 !important;
+   flex: 1;
 }
 
 .bull {
   border-width: 2px !important;
   border-color: red !important;
+  flex: 1;
 }
 
 .edit {
   max-width: 100px !important;
   background-color: yellow !important;
   width: 100px !important;
+  flex: 1;
 }
 
 .editInput {
   width: 80px !important;
+  flex: 1;
 }
 
 .killshot {
   border-width: 2px !important;
   border-color: blue !important;
+  flex: 1;
 }
 
 .winner {
   background-color: #4dff00 !important;
+}
+
+.matchTable {
+  display: flex;
+  flex-direction: column;
+  overflow-x: auto;
+}
+
+.tableContainer {
+  display: flex;
+  overflow-x: auto;
+  padding-right: 30px;
 }

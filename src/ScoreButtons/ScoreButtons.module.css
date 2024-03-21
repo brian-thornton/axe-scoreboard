@@ -3,9 +3,28 @@
 }
 
 .columnButton {
-  width: 100% !important;
+  width: 50%;
+  margin-bottom: 5px;
+  
 }
 
 .killshotResultButton {
   width: 100% !important;
+  margin-top: 10px;
+}
+
+.buttonContainer {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: row wrap;
+  align-items: space-between;
+  align-content: space-between;
+  width: 100%;
+  column-gap: 5px;
+} 
+
+.outerContainer {
+  display: flex;
+  flex-direction: column;
+  margin-top: 30px;
 }

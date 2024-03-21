@@ -11,17 +11,13 @@ type MatchCompleteProps = {
 }
 
 const MatchComplete: FC<MatchCompleteProps> = ({ winner, startNextMatch, goToLeaderboard, players }) => (
-    <Container>
-      {players.length > 1 && (
-        <Row>
-          <div className={styles.winnerLabel}>{`Match Complete. Winner: ${winner.name}`}</div>
-        </Row>
-      )}
-      <Row className={styles.centerRow}>
-        <Button className={styles.nextMatchButton} onClick={startNextMatch}>Start Next Match</Button>
-        <Button className={styles.leaderboardButton} onClick={goToLeaderboard}>Leaderboard</Button>
-      </Row>
-    </Container>
+  <div className={styles.container}>
+    {players.length > 1 && (
+      <div className={styles.winnerLabel}>{`Match Complete. Winner: ${winner.name}`}</div>
+    )}
+    <Button className={styles.button} onClick={startNextMatch}>Start Next Match</Button>
+    <Button className={styles.button} onClick={goToLeaderboard}>Leaderboard</Button>
+  </div>
 )
 
 export default MatchComplete

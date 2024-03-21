@@ -2,13 +2,37 @@
   margin-top: 10px !important;
 }
 
-.target {
+.outerContainer {
   display: flex;
-  max-width: 30% !important;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+}
+
+.innerContainer {
+  display: flex;
+  flex-direction: row;
+  margin-top: 10px;
+  width: 80%;
+}
+
+.buttonContainer {
+  display: flex;
+  flex-direction: column;
+  padding: 10px;
+  width: 100%;
+}
+
+.target {
+  min-width: 50%;
 }
 
 @media screen and (max-width: 600px) {
   .target {
-    display: none; 
+    display: none;
+  }
+
+  .innerContainer {
+    width: 90%;
   }
 }
