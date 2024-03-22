@@ -24,9 +24,16 @@ export type IMatchPlayer = {
     dropped: boolean
 };
 
-export type IMatchHistory = {
+export type IMatchHistory = [{
     id: number,
     winner: IPlayer,
     players: IMatchPlayer[],
     teams: any
-};
+}];
+
+export type IMatch = {
+    matchDate: string,
+    players: IMatchPlayer[],
+    winner: IMatchPlayer,
+    teams: any
+}

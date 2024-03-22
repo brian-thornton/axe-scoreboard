@@ -1,4 +1,3 @@
-import React, { useState } from "react";
 import Table from "react-bootstrap/Table";
 
 import styles from './ActiveMatchTable.module.css';
@@ -10,12 +9,6 @@ const ActiveMatchTable = ({ framesToDisplay, setEditCell, editCell, isMatchCompl
       matchThrow,
     });
   };
-
-  const renderCell = (player, matchThrow, className = '') => (
-    <td className={className} onClick={() => onCellClick(player, matchThrow)}>
-      {player.matchThrows[matchThrow]}
-    </td>
-  );
 
   const roundCell = (player, matchThrow, index) => {
     const isPlayerTied = tiedPlayers?.some((t) => t.id === player.id);
@@ -38,7 +31,11 @@ const ActiveMatchTable = ({ framesToDisplay, setEditCell, editCell, isMatchCompl
       className = styles.killshot;
     }
 
-    return renderCell(player, matchThrow, className);
+    return (
+      <td className={className} onClick={() => onCellClick(player, matchThrow)}>
+        {player.matchThrows[matchThrow]}
+      </td>
+    );
   };
 
   const totalCell = (player) => {
@@ -75,7 +72,7 @@ const ActiveMatchTable = ({ framesToDisplay, setEditCell, editCell, isMatchCompl
 
   return (
     <div className={styles.tableContainer}>
-      <Table striped bordered hover style={{ backgroundImage: 'linear-gradient(to top, #a6a6aa, #bcbcbf, #d2d2d4, #e8e8e9, #ffffff);' }}>
+      <Table striped bordered hover>
         <thead>
           <tr>
             <th>Name</th>

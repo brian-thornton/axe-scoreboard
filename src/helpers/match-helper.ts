@@ -27,7 +27,7 @@ export const zeroScores = (players: IMatchPlayer[]) => {
   return players;
 };
 
-export const appendToExistingMatchHistory = (existingHistory: IMatchHistory[], players: IMatchPlayer[], matchWinner: IMatchPlayer) => {
+export const appendToExistingMatchHistory = (existingHistory: IMatchHistory, players: IMatchPlayer[], matchWinner: IMatchPlayer) => {
   existingHistory.push({
     matchDate: new Date(),
     // @ts-ignore
@@ -89,7 +89,7 @@ export const identifyMatchWinner = (players: IMatchPlayer[]) => {
   return matchWinner;
 };
 
-export const formatMatchHistory = (matchHistory: IMatchHistory[], players: IMatchPlayer[], matchWinner: IMatchPlayer) => {
+export const formatMatchHistory = (matchHistory: IMatchHistory, players: IMatchPlayer[], matchWinner: IMatchPlayer) => {
   const newMatchHistory = [...matchHistory];
   newMatchHistory.push({
     matchDate: new Date(),

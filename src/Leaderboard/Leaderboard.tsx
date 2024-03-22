@@ -4,7 +4,8 @@ import {FC} from "react";
 import Table from "react-bootstrap/Table";
 
 import NoMatchData from '../NoMatchData/NoMatchData';
-import { IMatchHistory, IPlayer } from 'interface';
+import { IPlayer, IMatch } from 'interface';
+import { getPlayerWins, getPlayerLosses } from '../helpers/player-helper';
 
 import styles from './Leaderboard.module.css';
 
@@ -31,33 +32,19 @@ const Leaderboard: FC<LeaderboardProps> = ({ startMatch, matchPlayers, setMatchP
     return players;
   };
 
-  const getPlayerWins = (player: IPlayer) => {
-    let wins = 0;
+  // const getPlayerLosses = (player: IPlayer) => {
+  //   let losses = 0;
 
-    matchHistory.map((match) => {
-      match.players?.map((matchPlayer) => {
-        if (matchPlayer.id === player.id) {
-          wins += match.winner.id === matchPlayer.id ? 1 : 0;
-        }
-      });
-    });
+  //   matchHistory.map((match) => {
+  //     match.players?.map((matchPlayer) => {
+  //       if (matchPlayer.id === player.id) {
+  //         losses += match.winner.id === matchPlayer.id ? 0 : 1;
+  //       }
+  //     });
+  //   });
 
-    return wins;
-  };
-
-  const getPlayerLosses = (player: IPlayer) => {
-    let losses = 0;
-
-    matchHistory.map((match) => {
-      match.players?.map((matchPlayer) => {
-        if (matchPlayer.id === player.id) {
-          losses += match.winner.id === matchPlayer.id ? 0 : 1;
-        }
-      });
-    });
-
-    return losses;
-  };
+  //   return losses;
+  // };
 
   const rows = () => {
     const rows = Array<JSX.Element>();
@@ -67,8 +54,8 @@ const Leaderboard: FC<LeaderboardProps> = ({ startMatch, matchPlayers, setMatchP
         rows.push(
           <tr key={player.id}>
             <td>{player.name}</td>
-            <td>{getPlayerWins(player)}</td>
-            <td>{getPlayerLosses(player)}</td>
+            <td>{getPlayerWins(matchHistory, player)}</td>
+            <td>{getPlayerLosses(matchHistory, player)}</td>
             <td><Form.Check
               type="checkbox"
               onChange={(event) => {
@@ -90,7 +77,7 @@ const Leaderboard: FC<LeaderboardProps> = ({ startMatch, matchPlayers, setMatchP
   }
 
   const matchHistoryStorage = localStorage.getItem('matchHistory');
-  let matchHistory = Array<IMatchHistory>();
+  let matchHistory = Array<IMatch>();
   if (matchHistoryStorage) {
     matchHistory = JSON.parse(matchHistoryStorage);
   }
