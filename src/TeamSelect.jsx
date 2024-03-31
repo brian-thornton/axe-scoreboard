@@ -1,15 +1,16 @@
 
 import Button from 'react-bootstrap/Button';
-import Card from "react-bootstrap/Card";
 import Container from 'react-bootstrap/Container';
 import Col from 'react-bootstrap/Col';
 import Row from 'react-bootstrap/Row';
 import ListGroup from 'react-bootstrap/ListGroup';
-import React, { useState } from "react";
+import { useState } from "react";
 import { Navigate } from 'react-router-dom';
 
 import { loadFromStorage } from './helpers/dataHelper';
 import { Controller } from 'react-bootstrap-icons';
+import AvailableTeamList from './AvailableTeamList/AvailableTeamList';
+import SelectedTeamList from './SelectedTeamList/SelectedTeamList';
 
 const TeamSelect = ({ setSelectedTeams }) => {
   const [teams, setTeams] = useState(loadFromStorage('teams'));
@@ -34,23 +35,12 @@ const TeamSelect = ({ setSelectedTeams }) => {
         </Row>
         <Row>
           <Col sm="5" md="5" lg="5" xl="5">
-            <ListGroup>
-              {teams.map((team, index) => {
-
-                if (!matchTeams.find(t => t.id === team.id)) {
-                  return (
-                    <ListGroup.Item active={activeSelect?.id === team.id} onClick={() => {
-                      if (activeSelect?.id === team.id) {
-                        setActiveSelect(null);
-                      } else {
-                        setActiveSelect(team)
-                      }
-                    }
-                    }>{team.name}</ListGroup.Item>
-                  );
-                }
-              })}
-            </ListGroup>
+            <AvailableTeamList
+              teams={teams}
+              matchTeams={matchTeams}
+              activeSelect={activeSelect}
+              setActiveSelect={setActiveSelect}
+            />
           </Col>
           <Col sm="2" md="2" lg="2" xl="2">
             <Container>
@@ -136,22 +126,11 @@ const TeamSelect = ({ setSelectedTeams }) => {
               </ListGroup>
             )}
             {matchTeams.length > 0 && (
-              <ListGroup>
-                {matchTeams.map((team, index) => {
-                  return (
-                    <ListGroup.Item
-                      active={activeRemove?.id === team.id}
-                      onClick={() => {
-                        if (activeRemove?.id === team.id) {
-                          setActiveRemove(null);
-                        } else {
-                          setActiveRemove(team)
-                        }
-                      }}
-                    >{team.name}</ListGroup.Item>
-                  );
-                })}
-              </ListGroup>
+              <SelectedTeamList
+                matchTeams={matchTeams}
+                activeRemove={activeRemove}
+                setActiveRemove={setActiveRemove}
+              />
             )}
           </Col>
         </Row>

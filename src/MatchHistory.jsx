@@ -1,5 +1,4 @@
-import React from "react";
-import MatchTable from "./MatchTable";
+import MatchTable from "./MatchTable/MatchTable";
 import NoMatchHistory from "./NoMatchHistory";
 
 const MatchHistory = () => {

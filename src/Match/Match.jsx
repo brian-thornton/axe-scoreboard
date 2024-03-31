@@ -1,6 +1,5 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import Button from 'react-bootstrap/Button';
-import Col from 'react-bootstrap/Col';
 
 import ActiveMatchTable from '../ActiveMatchTable/ActiveMatchTable';
 import DoublePlayerTurn from '../DoublePlayerTurn';

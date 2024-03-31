@@ -1,7 +1,7 @@
 import Button from 'react-bootstrap/Button';
 import Container from 'react-bootstrap/Container';
 import Col from 'react-bootstrap/Col';
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import Row from "react-bootstrap/Row";
 
 import ActiveMatchTable from './ActiveMatchTable/ActiveMatchTable';
